@@ -10,7 +10,6 @@
 ### 接入自己已有api测试请看这里
 * common.js中的toLogin方法中在调用api方法login之后返回的信息中，根据自己api返回的字段名称替换token,expires_time字段即可，该方法中会自动调用updateToken更新store中的相关登录信息
 * updateToken方法会调用getuserInfo去更新store中userinfo信息，可根据自己api进行调整或者注释即可
-
 ---
 
 ### common部分方法说明
@@ -18,14 +17,24 @@
 * toLogin() 授权后去执行的登录相关
 * updateToken() 更新 store中登录相关字段信息
 * checkLogin() 判断当前是否登录状态
-
-![](README_files/1.jpg)
 ---
+
+![](README_files/2.jpg)
 
 ### 流程说明
 * 小程序端用户未授权，引导用户手动授权，已授权将自动登录
 * h5中未登录直接跳转至登录界面
 * 微信公众号中未授权将直接公众号授权 （需要执行 npm install 安装 wechat-jssdk）
+
+### 公众号授权流程 （已安装 wechat-jssdk）
+* 相关方法存在在utils/auth.js中
+* autoAuth() 方法中判断 _isWeixin = true时处于微信公众号环境下 （WECHAT_LOGIN 是在config.js下配置一个字段，为true时，将不会公众号授权，将走h5的登录界面）
+* 执行utils/wechat/auth.js中 toAuth（）请求方法 获取appId等信息
+* getAuthUrl()方法传入appId参数获取授权重定向地址 redirect_uri 
+* 重定向地址页面  解析获取code等参数
+* toLogin方法传入code参数等,该方法中 发起 wechatAuth(code)请求获取获取登录信息
+
+---
 
 ### 字段说明
 |  字段   | 类型  |默认值  |描述  |
@@ -43,3 +52,6 @@
 * 补充怎么使用自己api测试
 * 补充字段说明
 * 补充流程图
+
+### V0.0.3
+* 补充公众号授权流程说明
