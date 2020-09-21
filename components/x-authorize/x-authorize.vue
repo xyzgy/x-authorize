@@ -93,6 +93,7 @@ export default {
 		//检测登录状态
 		checkAuthStatus() {
 			let _this = this;
+			if(this.isHidden){this.scopeUserInfo = false ;return}
 			if (checkLogin()) {
 				console.log('已登录');
 			} else {
@@ -106,7 +107,7 @@ export default {
 							_this.getUserInfo();
 						} else {
 							_this.scopeUserInfo = false;
-							if (_this.isHidden) {
+							if (_this.isAuto) {
 								// 自动授权
 								_this.getUserInfo();
 							} else {
@@ -123,7 +124,6 @@ export default {
 			}
 		},
 		getLoginInfo(userInfo) {
-			console.log(userInfo);
 			let that = this;
 			toLogin(userInfo, function(res) {
 				console.log(res);

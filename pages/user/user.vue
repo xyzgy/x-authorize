@@ -1,16 +1,19 @@
 <template>
 	<view>
-		<view>{{des}}</view>
-		<x-authorize @login="login"></x-authorize></view>
+		<view >{{des}}</view>
+		<view v-if="isLogin">
+			<image src="@/static/image/1.jpg" mode="aspectFit" @click="previewImage"></image>
+		</view>
+		<x-authorize @login="login" :isHidden="false"></x-authorize></view>
 </template>
 
 <script>
-	import { checkLogin } from '@/utils/common.js';
-
+	import { checkLogin,autoAuth } from '@/utils/common.js';
 export default {
 	data() {
 		return {
-			des:'未登录'
+			des:'未登录',
+			isLogin:false
 		};
 	},
 	methods: {
@@ -20,14 +23,21 @@ export default {
 			console.log(res);
 		},
 		updateData(){
-			this.des = '已登录'
-		}
+			this.des = '已登录';
+			this.isLogin = true
+		},
+		previewImage(path) {
+			console.log('xxxx')
+			uni.previewImage({
+				urls:[ require('@/static/image/1.jpg')]
+			});
+		},
 	},
 		onShow() {
 			if (checkLogin()) {
 				this.updateData();
 			}else{
-				
+				autoAuth()
 			}
 		}
 };

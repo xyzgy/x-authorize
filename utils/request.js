@@ -1,4 +1,5 @@
 import unirequest from '../plugins/uni_request.js'
+import store from "../store";
 import {
 	uniShowToast,
 	successToast,
@@ -10,6 +11,9 @@ import {
 import {
 	VUE_APP_URL
 } from '../config.js'
+import {
+	autoAuth
+} from '@/utils/common.js'
 // 初始化自定义参数 login 是否需要登录权限  cancel 是否取消上次请求
 const defaultOptions = {
 	login: true,

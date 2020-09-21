@@ -70,12 +70,10 @@ export function toLogin(data, callback) {
 		let url = storage.get(WECHAT_AUTH_BACK_URL) || 'pages/index/index',
 			spid = store.state.spid;
 		request = wechatAuth(data.code, spid, 'wechat')
-	} else {
-		
+	} else {		
 		request = login(data);
 	}
 	request.then(res => {
-		console.log('login', res)
 		let data = res.data;
 		let token = data.token,
 			expires_time = 1593591798; // store.state.expires_time || 1593522851;

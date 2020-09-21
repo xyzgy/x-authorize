@@ -26,9 +26,6 @@ export function getWechatConfig() {
 // 	}
 // }
 
-
-
-
 /**
  * 获取微信sdk配置
  * @returns {*}
@@ -71,12 +68,6 @@ export function login(data) {
 // 	}
 // }
 
-
-
-
-
-
-
 /*
  * 用户信息
  * */
@@ -84,5 +75,4 @@ export function getUserInfo(data) {
 	return request.get("/user", data, {
 		login: true
 	});
-	// return request.get("/userinfo");
 }
