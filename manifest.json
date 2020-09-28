@@ -63,5 +63,8 @@
                 "enable" : true
             }
         }
+    },
+    "mp-toutiao" : {
+        "appid" : "ttb066c6db2f5cef29"
     }
 }

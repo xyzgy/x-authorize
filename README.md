@@ -8,15 +8,12 @@
 * request方法对api请求前做一次鉴权判断，但这需要在请求传入参数时传入相关字段辅助（本人声明login为true时代表该api需要鉴权，未授权时，调用autoAuth（））
 
 ### 接入自己已有api测试请看这里
+* manifest.json中填入自己appid
+* /config.js下 更改 VUE_APP_URL 未自己请求地址
+* /api/public,js 填写自己的接口地址  getWechatConfig(微信公众号配置)  / wechatAuth(微信公众号登录信息) / login(多端登录授权)
 * common.js中的toLogin方法中在调用api方法login之后返回的信息中，根据自己api返回的字段名称替换token,expires_time字段即可，该方法中会自动调用updateToken更新store中的相关登录信息
 * updateToken方法会调用getuserInfo去更新store中userinfo信息，可根据自己api进行调整或者注释即可
----
 
-### common部分方法说明
-* autoAuth() 自动授权
-* toLogin() 授权后去执行的登录相关
-* updateToken() 更新 store中登录相关字段信息
-* checkLogin() 判断当前是否登录状态
 ---
 
 ![](README_files/2.jpg)
@@ -35,6 +32,15 @@
 * toLogin方法传入code参数等,该方法中 发起 wechatAuth(code)请求获取获取登录信息
 
 ---
+
+### common部分方法说明
+* autoAuth() 自动授权
+* toLogin() 授权后去执行的登录相关
+* updateToken() 更新 store中登录相关字段信息
+* checkLogin() 判断当前是否登录状态
+
+---
+
 
 ### 字段说明
 |  字段   | 类型  |默认值  |描述  |
@@ -55,3 +61,7 @@
 
 ### V0.0.3
 * 补充公众号授权流程说明
+
+### V0.0.4
+* 小程序初始化时，增加鉴权，token过期时，直接移除授权相关信息
+* 补充头条小程序字体文件

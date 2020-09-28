@@ -1,11 +1,14 @@
 <script>
+		import { checkLogin } from '@/utils/common.js';
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
 		// #ifdef APP-PLUS
 		this.checkVersion();
 		// #endif
-		this.initData();
+		if(checkLogin()){
+			this.initData();
+		}
 
 	},
 	onShow: function() {

@@ -27,7 +27,6 @@ export default {
 			this.isLogin = true
 		},
 		previewImage(path) {
-			console.log('xxxx')
 			uni.previewImage({
 				urls:[ require('@/static/image/1.jpg')]
 			});

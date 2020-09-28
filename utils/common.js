@@ -144,7 +144,12 @@ export function checkLogin() {
 	if (token) {
 		let newTime = Math.round(new Date() / 1000);
 		console.log('xxxxxxx', expires_time, newTime, )
-		return !(expires_time < newTime)
+		let login = !(expires_time < newTime);
+		if(!login){
+			console.log('xxxxxxxxxxxxxx已过期')
+			updateToken(null, null, {}) 
+		}
+		return login;
 	} else {
 		return false;
 	}
