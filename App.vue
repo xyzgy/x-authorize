@@ -6,9 +6,9 @@ export default {
 		// #ifdef APP-PLUS
 		this.checkVersion();
 		// #endif
-		if(checkLogin()){
 			this.initData();
-		}
+			
+			checkLogin()
 
 	},
 	onShow: function() {
