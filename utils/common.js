@@ -25,6 +25,7 @@ import {
 // #endif
 // 自动去执行授权登录
 export function autoAuth() {
+	store.commit("HIDE_AUTH_POPUP_SHOW");
 	store.commit("LOGOUT");
 	// #ifdef H5
 	if (_isWeixin && WECHAT_LOGIN) {

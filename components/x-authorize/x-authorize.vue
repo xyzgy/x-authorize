@@ -98,10 +98,6 @@ export default {
 		//检测登录状态
 		checkAuthStatus() {
 			let _this = this;
-			if (this.isHidden) {
-				this.scopeUserInfo = false;
-				return;
-			}
 			if (checkLogin()) {
 				console.log('已登录');
 			} else {
@@ -115,13 +111,16 @@ export default {
 							_this.getUserInfo();
 						} else {
 							_this.scopeUserInfo = false;
-							if (_this.isAuto) {
-								// 自动授权
-									_this.getUserInfo();
-					
-							} else {
-								// 引导用户手动授权
-								_this.open();
+							if(_this.isHidden){
+															 // 自动授权
+															 	// _this.getUserInfo()
+							}else{
+															 // 引导用户手动授权
+															 if(_this.isAuto){
+																 _this.getUserInfo()
+															 }else{
+																 _this.open();
+															 }
 							}
 						}
 					}
