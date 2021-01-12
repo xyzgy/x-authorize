@@ -25,7 +25,6 @@ import {
 // #endif
 // 自动去执行授权登录
 export function autoAuth() {
-	store.commit("HIDE_AUTH_POPUP_SHOW");
 	store.commit("LOGOUT");
 	// #ifdef H5
 	if (_isWeixin && WECHAT_LOGIN) {
@@ -87,7 +86,9 @@ export function toLogin(data, callback) {
 		if (_isWeixin && WECHAT_LOGIN) {
 			// 微信公众号授权
 			console.log('公众号自动授权并登录获取信息成功，之后返回首页')
-			location.href = data.url || '/'
+			getuserInfo().then(res=>{
+				location.href = data.url || '/'
+			});
 		} else {
 			console.log('H5登录获取信息成功，返回上一级', expires_time)
 			uniNavigator(1, "navigateBack")
@@ -133,6 +134,7 @@ export function updateToken(token, expires_time, data) {
 
 export async function getuserInfo() {
 	let res = await getUserInfo();
+	console.log('updateUPDATE_USERINFO', res.data)
 	store.commit("UPDATE_USERINFO", res.data);
 	return res
 }

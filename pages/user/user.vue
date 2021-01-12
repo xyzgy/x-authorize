@@ -1,44 +1,49 @@
 <template>
 	<view>
-		<view >{{des}}</view>
-		<view v-if="isLogin">
-			<image src="@/static/image/1.jpg" mode="aspectFit" @click="previewImage"></image>
-		</view>
-		<x-authorize @login="login" :isHidden="false"></x-authorize></view>
+		<view>{{ des }}</view>
+		<view v-if="isLogin"><image src="@/static/image/1.jpg" mode="aspectFit" @click="previewImage"></image></view>
+		<button class="unbtn" @click="init('auth')" v-else>手动</button>
+		<x-authorize @login="login"></x-authorize>
+	</view>
 </template>
 
 <script>
-	import { checkLogin,autoAuth } from '@/utils/common.js';
+import { autoAuth } from '@/utils/common.js';
+import { mapGetters } from 'vuex';
 export default {
+	computed: mapGetters(['isLogin', 'userInfo']),
 	data() {
 		return {
-			des:'未登录',
-			isLogin:false
+			des: '未登录'
 		};
 	},
 	methods: {
 		login(res) {
 			this.$showToast('登录成功');
-			this.updateData()
+			this.updateData();
 			console.log(res);
 		},
-		updateData(){
+		updateData() {
 			this.des = '已登录';
-			this.isLogin = true
 		},
 		previewImage(path) {
 			uni.previewImage({
-				urls:[ require('@/static/image/1.jpg')]
+				urls: [require('@/static/image/1.jpg')]
 			});
 		},
-	},
-		onShow() {
-			if (checkLogin()) {
+		init(type) {
+			if (this.isLogin) {
 				this.updateData();
-			}else{
-				autoAuth()
+			} else {
+				if (type === 'auth') {
+					autoAuth();
+				}
 			}
 		}
+	},
+	onShow() {
+		this.init();
+	}
 };
 </script>
 

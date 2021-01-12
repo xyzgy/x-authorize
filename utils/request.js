@@ -32,6 +32,9 @@ let setCancel;
 // 请求拦截器
 instance.interceptors.request.use(
 	config => {
+		const headers = config.header || {};
+		headers["Authori-zation"] = "Bearer " + store.state.token;
+		config.header = headers;
 		config.cancelToken = new unirequest.CancelToken(function executor(c) {
 			setCancel = c; //记录当前请求
 		});

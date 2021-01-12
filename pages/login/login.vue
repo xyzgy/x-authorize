@@ -16,7 +16,14 @@ export default {
 		}
 	},
 	mounted() {
-	}
+	},
+	onHide() {
+		
+		console.log('onHide')
+	},
+	onUnload() {
+		console.log('onHide')
+	},
 };
 </script>
 

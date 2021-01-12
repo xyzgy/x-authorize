@@ -16,6 +16,10 @@ const store = new Vuex.Store({
 			state.token = null;
 			state.expires_time = null;
 			state.userInfo = {};
+			state.authPopupShow = false;
+				// #ifdef H5
+			state.isGOAuth = false;
+			// #endif
 			storage.remove('token')
 			storage.remove('expires_time')
 		},
@@ -51,6 +55,7 @@ const store = new Vuex.Store({
 	},
 	getters: {
 		token: state => state.token,
+		isLogin: state => !!state.token,
 		userInfo: state => state.userInfo || {},
 		expires_time: state => state.expires_time,
 		authPopupShow: state => state.authPopupShow

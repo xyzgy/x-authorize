@@ -2,7 +2,7 @@
 	<view>
 		<!-- #ifdef MP -->
 		<uni-popup ref="popup" type="center" :maskClick="false">
-			<view class=" authorize">
+			<view class="flex flex_align_center authorize">
 				<view class="text_center relative">
 					<view class="top">
 						<view class="title">授权登录</view>
@@ -26,151 +26,133 @@
 
 <script>
 import uniPopup from '@/components/uni-popup/uni-popup.vue';
-import { isWeixin } from '@/utils/validate.js';
-import { toLogin, autoAuth, checkLogin } from '@/utils/common.js';
+import { toLogin, autoAuth } from '@/utils/common.js';
+import { mapGetters } from 'vuex';
 export default {
 	components: {
 		uniPopup
 	},
 	data() {
 		return {
-			scopeUserInfo: true
 		};
 	},
+	computed: mapGetters(['isLogin', 'authPopupShow', 'userInfo']),
 	props: {
 		isAuto: {
 			type: Boolean,
 			default: true
-		},
-		isHidden: {
-			type: Boolean,
-			default: false
 		}
 	},
 	watch: {
-		'$store.getters.authPopupShow': function(newVal, oldVal) {
-			if (newVal && !this.scopeUserInfo) {
+		authPopupShow: function(newVal, oldVal) {
+			if (newVal) {
 				this.open();
-			} else {
-				this.close();
+			}
+		},
+		isLogin: function(newVal, oldVal) {
+			if (newVal) {
+				this.close()
+				this.$emit('login', this.userInfo);
 			}
 		}
 	},
 	methods: {
-		getUserInfo(userInfo, isLogin) {
+		getUserInfo() {
 			let _this = this;
-			if (isLogin) {
-				_this.getLoginInfo(userInfo);
-			} else {
-				
-				uni.login({
-					success(res) {
-						uni.showLoading({ title: '正在登录中' });
-						uni.getUserInfo({
-							// #ifdef MP-WEIXIN
-							lang: 'zh_CN', //头条不支持该字段
-							// #endif
-							// #ifdef MP-TOUTIAO
-							withCredentials: true,
-							// #endif
-							success(userInfo) {
-								_this.close();
-								userInfo.code = res.code;
-								_this.getLoginInfo(userInfo);
-							},
-							fail(err) {
-								// 用户未曾授权
-								uni.hideLoading();
-								_this.open();
-							}
-						});
-					},
-					fail(err) {
-						uni.hideLoading();
-						uni.showToast({
-							title:err.errMsg,
-							icon:'none'
-						})
-					}
-				});
-			}
+			uni.showLoading({ title: '正在登录中' });
+			uni.login({
+				success(res) {
+					uni.getUserInfo({
+						// #ifdef MP-WEIXIN
+						lang: 'zh_CN', //头条不支持该字段
+						// #endif
+						// #ifdef MP-TOUTIAO
+						withCredentials: true,
+						// #endif
+						success(userInfo) {
+							_this.close();
+							userInfo.code = res.code;
+							_this.getLoginInfo(userInfo);
+						},
+						fail(err) {
+							// 用户未曾授权
+							uni.hideLoading();
+							_this.open();
+						}
+					});
+				},
+				fail(res) {
+					uni.hideLoading();
+				}
+			});
 		},
 		//检测登录状态
 		checkAuthStatus() {
 			let _this = this;
-			if (checkLogin()) {
+			if (this.isLogin) {
 				console.log('已登录');
 			} else {
+				// #ifdef H5
+				autoAuth();
+				// #endif
 				// #ifdef MP
-				uni.getSetting({
+				wx.getSetting({
 					success(res) {
 						console.log(res);
 						if (res.authSetting['scope.userInfo']) {
 							// 已授权获取用户信息
-							_this.scopeUserInfo = true;
 							_this.getUserInfo();
 						} else {
-							_this.scopeUserInfo = false;
-							if(_this.isHidden){
-															 // 自动授权
-															 	// _this.getUserInfo()
-							}else{
-															 // 引导用户手动授权
-															 if(_this.isAuto){
-																 _this.getUserInfo()
-															 }else{
-																 _this.open();
-															 }
+							// 引导用户手动授权
+							if (_this.isAuto) {
+								_this.getUserInfo();
 							}
 						}
 					}
 				});
 				// #endif
-				// #ifdef H5
-				autoAuth();
-				// #endif
 			}
 		},
 		getLoginInfo(userInfo) {
-			let that = this;
 			toLogin(userInfo, function(res) {
-				console.log(res);
-				that.$emit('login', userInfo);
 				uni.hideLoading();
 			});
 		},
 		close() {
+			// #ifdef MP
 			this.$refs.popup.close();
+			// #endif
 			this.$store.commit('HIDE_AUTH_POPUP_SHOW');
 		},
 		open() {
 			this.$hideToast();
+			// #ifdef MP
 			this.$refs.popup.open();
+			// #endif
 		}
 	},
 	mounted() {
-		// this.open()
-		// #ifdef H5
-		console.log('isWeixin', isWeixin());
-		// #endif
-		// #ifndef H5
-		// #endif
-
 		this.checkAuthStatus();
 	}
 };
 </script>
 
 <style lang="scss" scoped>
+	.flex {
+		display: flex;
+	}
+	.flex_align_center {
+		align-items: center;
+	}
+	.text_center {
+		text-align: center;
+	}
 .authorize {
 	width: 600rpx;
-	display: flex;
-	align-items: center;
 	// border-radius: 15rpx;
 	background-color: #fff;
 	.text_center {
 		width: 100%;
-		text-align: center;
 		.top {
 			padding: 20rpx 40rpx;
 			.title {
@@ -188,7 +170,6 @@ export default {
 		.bottom {
 			bottom: 0;
 			width: 100%;
-			display: flex;
 			// border-bottom-left-radius: 15rpx;
 			// border-bottom-right-radius: 15rpx;
 			.btn {
