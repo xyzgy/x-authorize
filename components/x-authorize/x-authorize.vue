@@ -93,7 +93,9 @@ export default {
 				console.log('已登录');
 			} else {
 				// #ifdef H5
-				autoAuth();
+				if (_this.isAuto) {
+					autoAuth();
+				}
 				// #endif
 				// #ifdef MP
 				wx.getSetting({
