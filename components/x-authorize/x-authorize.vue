@@ -11,7 +11,8 @@
 					<view class="bottom flex">
 						<button class="btn" @click="close">取消</button>
 						<!-- #ifdef MP-WEIXIN -->
-						<button class="btn" type="primary" open-type="getUserInfo" @getuserinfo="getUserInfo">授权</button>
+						<button v-if="canUseGetUserProfile" class="btn" type="primary" @click="getUserProfile">授权</button>
+						<button v-else class="btn" type="primary" open-type="getUserInfo" @getuserinfo="getUserInfo">授权</button>
 						<!-- #endif -->
 						<!-- #ifdef MP-TOUTIAO -->
 						<button class="btn" type="primary" @click="getUserInfo">授权</button>
@@ -34,6 +35,7 @@ export default {
 	},
 	data() {
 		return {
+			canUseGetUserProfile: false //判断api是否存在
 		};
 	},
 	computed: mapGetters(['isLogin', 'authPopupShow', 'userInfo']),
@@ -86,6 +88,38 @@ export default {
 				}
 			});
 		},
+		getLoginCode() {
+			return new Promise((resolve, reject) => {
+				uni.login({
+					success(res) {
+						console.log('auth', res);
+						resolve(res);
+					},
+					fail(err) {
+						reject(err);
+						uni.hideLoading();
+					}
+				});
+			});
+		},
+		getUserProfile() {
+			let _this = this;
+			uni.getUserProfile({
+				desc: '用于完善会员信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+				success: async userInfo => {
+					let res = await _this.getLoginCode();
+					_this.close();
+					userInfo.code = res.code;
+					_this.getLoginInfo(userInfo);
+				},
+				fail(err) {
+					console.log('auth', err);
+					// 用户未曾授权
+					uni.hideLoading();
+					_this.open();
+				}
+			});
+		},
 		//检测登录状态
 		checkAuthStatus() {
 			let _this = this;
@@ -134,6 +168,9 @@ export default {
 		}
 	},
 	mounted() {
+		if (uni.getUserProfile) {
+			this.canUseGetUserProfile = true;
+		}
 		this.checkAuthStatus();
 	}
 };
