@@ -142,20 +142,13 @@ export async function getuserInfo() {
 
 
 export function checkLogin() {
-	let token = store.state.token;
-	let expires_time = store.state.expires_time;
-	if (token) {
-		let newTime = Math.round(new Date() / 1000);
-		console.log('xxxxxxx', expires_time, newTime, )
-		let login = !(expires_time < newTime);
-		if(!login){
-			console.log('xxxxxxxxxxxxxx已过期')
-			updateToken(null, null, {}) 
-		}
-		return login;
-	} else {
-		return false;
+	const expires_time = storage.get('expires_time');
+	let newTime = Math.round(new Date() / 1000);
+	let login = !(expires_time < newTime);
+	if (!login) {
+		updateToken(null, null, {})
 	}
+	return login
 }
 
 export function updateTitle(title) {

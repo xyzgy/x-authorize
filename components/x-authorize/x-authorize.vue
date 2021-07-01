@@ -47,9 +47,7 @@ export default {
 	},
 	watch: {
 		authPopupShow: function(newVal, oldVal) {
-			if (newVal) {
-				this.open();
-			}
+			newVal && this.open();
 		},
 		isLogin: function(newVal, oldVal) {
 			if (newVal) {
@@ -127,25 +125,10 @@ export default {
 				console.log('已登录');
 			} else {
 				// #ifdef H5
-				if (_this.isAuto) {
-					autoAuth();
-				}
+				_this.isAuto && autoAuth();
 				// #endif
 				// #ifdef MP
-				wx.getSetting({
-					success(res) {
-						console.log(res);
-						if (res.authSetting['scope.userInfo']) {
-							// 已授权获取用户信息
-							_this.getUserInfo();
-						} else {
-							// 引导用户手动授权
-							if (_this.isAuto) {
-								_this.getUserInfo();
-							}
-						}
-					}
-				});
+				_this.isAuto && _this.open();
 				// #endif
 			}
 		},
