@@ -141,11 +141,11 @@ export async function getuserInfo() {
 
 
 
-export function checkLogin() {
+export function checkLogin(update) {
 	const expires_time = storage.get('expires_time');
 	let newTime = Math.round(new Date() / 1000);
 	let login = !(expires_time < newTime);
-	if (!login) {
+	if (!login&&update) {
 		updateToken(null, null, {})
 	}
 	return login

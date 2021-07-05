@@ -69,7 +69,7 @@ export default {
 			let token = storage.get('token') || null,
 				expires_time = storage.get('expires_time') || null,
 				userInfo = storage.get('userInfo') || null;
-				if(checkLogin()){
+				if(checkLogin(false)){
 					this.$store.commit('LOGIN', { token, expires_time });
 				}
 			this.$store.commit('UPDATE_USERINFO', userInfo);
