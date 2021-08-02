@@ -80,7 +80,6 @@ export default {
 
 <style lang="scss">
 @import 'uview-ui/index.scss';
-@import './static/css/base.scss';
 /* #ifdef H5 */
 $minWidth: 750px;
 @mixin borderLR($w: 1rpx, $color: red) {

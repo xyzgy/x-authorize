@@ -122,14 +122,16 @@ export function authNavigator(url, type = 'navigateTo', args = {}) {
 }
 
 
-export function updateToken(token, expires_time, data) {
+export function updateToken(token, expires_time, data,update) {
 	console.log('updateToken', token)
 	console.log('updateTokenexpires_time', expires_time)
-	store.commit("LOGIN", {
-		token,
-		expires_time
-	});
-	getuserInfo()
+	if(token&&expires_time || update){
+		store.commit("LOGIN", {
+			token,
+			expires_time
+		});
+		getuserInfo()
+	}
 }
 
 export async function getuserInfo() {
