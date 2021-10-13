@@ -47,11 +47,15 @@ export default {
 	},
 	watch: {
 		authPopupShow: function(newVal, oldVal) {
-			newVal && this.open();
+			if (newVal) {
+				this.open();
+			}else{
+				this.close();
+			}
 		},
 		isLogin: function(newVal, oldVal) {
 			if (newVal) {
-				this.close()
+				this.close();
 				this.$emit('login', this.userInfo);
 			}
 		}

@@ -123,13 +123,11 @@ export function authNavigator(url, type = 'navigateTo', args = {}) {
 
 
 export function updateToken(token, expires_time, data,update) {
-	console.log('updateToken', token)
-	console.log('updateTokenexpires_time', expires_time)
-	if(token&&expires_time || update){
-		store.commit("LOGIN", {
-			token,
-			expires_time
-		});
+	store.commit("LOGIN", {
+		token,
+		expires_time
+	});
+	if (token && expires_time) {
 		getuserInfo()
 	}
 }
@@ -144,13 +142,14 @@ export async function getuserInfo() {
 
 
 export function checkLogin(update) {
-	const expires_time = storage.get('expires_time');
-	let newTime = Math.round(new Date() / 1000);
-	let login = !(expires_time < newTime);
-	if (!login&&update) {
+	let token = storage.get('token') || null,
+		expires_time = storage.get('expires_time') || null;
+	let newTime = Date.parse(new Date()) / (String(expires_time).length === 13 ? 1 : 1000)
+	let login = !(expires_time < newTime) && token;
+	if (!login) {
 		updateToken(null, null, {})
 	}
-	return login
+	return login;
 }
 
 export function updateTitle(title) {

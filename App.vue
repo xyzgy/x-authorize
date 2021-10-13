@@ -1,5 +1,5 @@
 <script>
-	import { checkLogin} from '@/utils/common.js';
+	import { checkLogin,updateToken} from '@/utils/common.js';
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
@@ -69,17 +69,17 @@ export default {
 			let token = storage.get('token') || null,
 				expires_time = storage.get('expires_time') || null,
 				userInfo = storage.get('userInfo') || null;
-				if(checkLogin(false)){
-					this.$store.commit('LOGIN', { token, expires_time });
+				this.$store.commit('UPDATE_USERINFO', userInfo);
+				if (checkLogin()) {
+					// this.$store.commit('LOGIN', { token, expires_time });
+					updateToken(token, expires_time)
 				}
-			this.$store.commit('UPDATE_USERINFO', userInfo);
 		}
 	}
 };
 </script>
 
 <style lang="scss">
-@import 'uview-ui/index.scss';
 /* #ifdef H5 */
 $minWidth: 750px;
 @mixin borderLR($w: 1rpx, $color: red) {
