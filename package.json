@@ -1,16 +1,20 @@
 {
   "name": "uniTemplate",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "version": "2.0.1",
+  "description": "h5、公众号、小程序授权登录 ",
+  "main": "",
   "dependencies": {
-    "wechat-jssdk": "^5.0.4"
+    "@dcloudio/uni-ui": "^1.4.9",
+    "uview-ui": "^1.8.4",
+    "wechat-jssdk": "^5.0.4",
+    "x-wxml-to-canvas": "^1.0.3"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "uni授权"
+  ],
+  "author": "xyzgy",
   "license": "ISC"
 }

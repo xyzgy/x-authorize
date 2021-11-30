@@ -1,19 +1,10 @@
 {
-	"pages": [ // #ifdef H5
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "登录"
-			}
-		},
-		{
-			"path": "pages/auth/auth",
-			"style": {
-				"navigationBarTitleText": "授权"
-			}
-		},
-		// #endif 
-		{
+	"easycom": {
+		"autoscan": true,
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
+		"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+	},
+	"pages": [{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "首页",
@@ -27,8 +18,31 @@
 				"navigationBarTitleText": "我的"
 
 			}
-		}
+		},
+		// #ifdef H5
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		// #endif 
 
+		 {
+			"path": "pages/share/share",
+			"style": {
+				"navigationBarTitleText": "分享",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/test/test",
+			"style": {
+				"navigationBarTitleText": "测试",
+				"enablePullDownRefresh": false
+			}
+
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
@@ -51,6 +65,11 @@
 			"iconPath": "static/image/bar/1-1.png",
 			"selectedIconPath": "static/image/bar/1-2.png",
 			"text": "首页"
+		}, {
+			"pagePath": "pages/share/share",
+			"iconPath": "static/image/bar/1-1.png",
+			"selectedIconPath": "static/image/bar/1-2.png",
+			"text": "分享"
 		}, {
 			"pagePath": "pages/user/user",
 			"iconPath": "static/image/bar/2-1.png",

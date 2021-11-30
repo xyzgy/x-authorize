@@ -3,6 +3,9 @@ import App from './App'
 
 // 路由
 
+import uView from "uview-ui";
+Vue.use(uView);
+
 Vue.config.productionTip = false
 
 import {

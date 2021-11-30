@@ -11,8 +11,10 @@
 					<view class="bottom flex">
 						<button class="btn" @click="close">取消</button>
 						<!-- #ifdef MP-WEIXIN -->
-						<button v-if="canUseGetUserProfile" class="btn" type="primary" @click="getUserProfile">授权</button>
-						<button v-else class="btn" type="primary" open-type="getUserInfo" @getuserinfo="getUserInfo">授权</button>
+						<button v-if="canUseGetUserProfile" class="btn" type="primary"
+							@click="getUserProfile">授权</button>
+						<button v-else class="btn" type="primary" open-type="getUserInfo"
+							@getuserinfo="getUserInfo">授权</button>
 						<!-- #endif -->
 						<!-- #ifdef MP-TOUTIAO -->
 						<button class="btn" type="primary" @click="getUserInfo">授权</button>
@@ -26,193 +28,195 @@
 </template>
 
 <script>
-import uniPopup from '@/components/uni-popup/uni-popup.vue';
-import { toLogin, autoAuth } from '@/utils/common.js';
-import { mapGetters } from 'vuex';
-export default {
-	components: {
-		uniPopup
-	},
-	data() {
-		return {
-			canUseGetUserProfile: false //判断api是否存在
-		};
-	},
-	computed: mapGetters(['isLogin', 'authPopupShow', 'userInfo']),
-	props: {
-		isAuto: {
-			type: Boolean,
-			default: true
-		}
-	},
-	watch: {
-		authPopupShow: function(newVal, oldVal) {
-			if (newVal) {
-				this.open();
-			}else{
-				this.close();
+	import {
+		toLogin,
+		autoAuth,
+		checkTokenStatus
+	} from '@/utils/login.js';
+	import {
+		mapGetters
+	} from 'vuex';
+	export default {
+		components: {},
+		data() {
+			return {
+				canUseGetUserProfile: false //判断api是否存在
+			};
+		},
+		computed: mapGetters(['authPopupShow', 'userInfo']),
+		props: {
+			isAuto: {
+				type: Boolean,
+				default: true
 			}
 		},
-		isLogin: function(newVal, oldVal) {
-			if (newVal) {
-				this.close();
-				this.$emit('login', this.userInfo);
-			}
-		}
-	},
-	methods: {
-		getUserInfo() {
-			let _this = this;
-			uni.showLoading({ title: '正在登录中' });
-			uni.login({
-				success(res) {
-					uni.getUserInfo({
-						// #ifdef MP-WEIXIN
-						lang: 'zh_CN', //头条不支持该字段
-						// #endif
-						// #ifdef MP-TOUTIAO
-						withCredentials: true,
-						// #endif
-						success(userInfo) {
-							_this.close();
-							userInfo.code = res.code;
-							_this.getLoginInfo(userInfo);
-						},
-						fail(err) {
-							// 用户未曾授权
-							uni.hideLoading();
-							_this.open();
-						}
-					});
-				},
-				fail(res) {
-					uni.hideLoading();
+		watch: {
+			authPopupShow: function(newVal, oldVal) {
+				if (newVal) {
+					this.open();
+				} else {
+					this.close();
 				}
-			});
+			}
 		},
-		getLoginCode() {
-			return new Promise((resolve, reject) => {
+		methods: {
+			getUserInfo() {
+				let _this = this;
+				uni.showLoading({
+					title: '正在登录中'
+				});
 				uni.login({
 					success(res) {
-						console.log('auth', res);
-						resolve(res);
+						uni.getUserInfo({
+							// #ifdef MP-WEIXIN
+							lang: 'zh_CN', //头条不支持该字段
+							// #endif
+							// #ifdef MP-TOUTIAO
+							withCredentials: true,
+							// #endif
+							success(userInfo) {
+								_this.close();
+								userInfo.code = res.code;
+								_this.getLoginInfo(userInfo);
+							},
+							fail(err) {
+								// 用户未曾授权
+								uni.hideLoading();
+								_this.open();
+							}
+						});
 					},
-					fail(err) {
-						reject(err);
+					fail(res) {
 						uni.hideLoading();
 					}
 				});
-			});
-		},
-		getUserProfile() {
-			let _this = this;
-			uni.getUserProfile({
-				desc: '用于完善会员信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-				success: async userInfo => {
-					let res = await _this.getLoginCode();
+			},
+			//检测登录状态
+			checkAuthStatus() {
+				let _this = this;
+				if (checkTokenStatus()) {
+					console.log('已登录');
 					_this.close();
-					userInfo.code = res.code;
-					_this.getLoginInfo(userInfo);
-				},
-				fail(err) {
-					console.log('auth', err);
-					// 用户未曾授权
-					uni.hideLoading();
-					_this.open();
+					this.$emit('login', this.userInfo);
+				} else {
+					// #ifdef H5
+					_this.isAuto && autoAuth();
+					// #endif
+					// #ifdef MP
+					_this.isAuto && _this.open();
+					// #endif
 				}
-			});
-		},
-		//检测登录状态
-		checkAuthStatus() {
-			let _this = this;
-			if (this.isLogin) {
-				console.log('已登录');
-			} else {
-				// #ifdef H5
-				_this.isAuto && autoAuth();
-				// #endif
+			},
+			getLoginCode() {
+				return new Promise((resolve, reject) => {
+					uni.login({
+						success(res) {
+							console.log('auth', res);
+							resolve(res);
+						},
+						fail(err) {
+							reject(err);
+							uni.hideLoading();
+						}
+					});
+				});
+			},
+			getUserProfile() {
+				let _this = this;
+				uni.getUserProfile({
+					desc: '用于完善会员信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+					success: async userInfo => {
+						let res = await _this.getLoginCode();
+						_this.close();
+						userInfo.code = res.code;
+						userInfo.version = true;
+						_this.getLoginInfo(userInfo);
+					},
+					fail(err) {
+						console.log('auth', err);
+						// 用户未曾授权
+						uni.hideLoading();
+						_this.open();
+					}
+				});
+			},
+			getLoginInfo(userInfo) {
+				toLogin(userInfo, function(res) {
+					uni.hideLoading();
+				});
+			},
+			close() {
 				// #ifdef MP
-				_this.isAuto && _this.open();
+				this.$refs.popup.close();
+				// #endif
+				this.$store.commit('HIDE_AUTH_POPUP_SHOW');
+
+				this.$storage.set('IS_AUTO_AUTH', false);
+			},
+			open() {
+				this.$hideToast();
+				// #ifdef MP
+				this.$refs.popup.open();
 				// #endif
 			}
 		},
-		getLoginInfo(userInfo) {
-			toLogin(userInfo, function(res) {
-				uni.hideLoading();
-			});
-		},
-		close() {
+		mounted() {
 			// #ifdef MP
-			this.$refs.popup.close();
+			if (uni.getUserProfile) {
+				this.canUseGetUserProfile = true;
+			}
 			// #endif
-			this.$store.commit('HIDE_AUTH_POPUP_SHOW');
-		},
-		open() {
-			this.$hideToast();
-			// #ifdef MP
-			this.$refs.popup.open();
-			// #endif
+			this.checkAuthStatus();
 		}
-	},
-	mounted() {
-		if (uni.getUserProfile) {
-			this.canUseGetUserProfile = true;
-		}
-		this.checkAuthStatus();
-	}
-};
+	};
 </script>
 
 <style lang="scss" scoped>
-	.flex {
-		display: flex;
-	}
-	.flex_align_center {
-		align-items: center;
-	}
-	.text_center {
-		text-align: center;
-	}
-.authorize {
-	width: 600rpx;
-	// border-radius: 15rpx;
-	background-color: #fff;
-	.text_center {
-		width: 100%;
-		.top {
-			padding: 20rpx 40rpx;
-			.title {
-				padding: 20rpx 0;
-				font-size: 32rpx;
-				font-weight: bold;
-			}
-			.tip {
-				padding: 30rpx 0;
-				font-size: 30rpx;
-				height: 150rpx;
-			}
-		}
+	.authorize {
+		width: 600rpx;
+		background-color: #fff;
 
-		.bottom {
-			bottom: 0;
+		.text_center {
 			width: 100%;
-			// border-bottom-left-radius: 15rpx;
-			// border-bottom-right-radius: 15rpx;
-			.btn {
-				width: 50%;
-				border-radius: 0;
-				height: 80rpx;
-				line-height: 80rpx;
-				&:after {
-					border: none;
+
+			.top {
+				padding: 20rpx 40rpx;
+
+				.title {
+					padding: 20rpx 0;
+					font-size: 32rpx;
+					font-weight: bold;
 				}
-				/* #ifdef MP-TOUTIAO */
-				&:last-child {
-					background-color: rgba(248, 89, 89, 1);
+
+				.tip {
+					padding: 30rpx 0;
+					font-size: 30rpx;
+					height: 150rpx;
 				}
-				/* #endif */
+			}
+
+			.bottom {
+				bottom: 0;
+				width: 100%;
+
+				.btn {
+					width: 50%;
+					border-radius: 0;
+					height: 80rpx;
+					line-height: 80rpx;
+
+					&:after {
+						border: none;
+					}
+
+					/* #ifdef MP-TOUTIAO */
+					&:last-child {
+						background-color: rgba(248, 89, 89, 1);
+					}
+
+					/* #endif */
+				}
 			}
 		}
 	}
-}
 </style>

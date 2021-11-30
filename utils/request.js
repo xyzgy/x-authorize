@@ -1,5 +1,11 @@
 import unirequest from '../plugins/uni_request.js'
 import store from "../store";
+
+import {
+	autoAuth,
+	checkTokenStatus
+} from '@/utils/login.js'
+
 import {
 	uniShowToast,
 	successToast,
@@ -9,14 +15,11 @@ import {
 	uniShowModal
 } from './uni_api'
 import {
-	VUE_APP_URL
+	VUE_APP_API_URL
 } from '../config.js'
-import {
-	autoAuth
-} from '@/utils/common.js'
 // 初始化自定义参数 login 是否需要登录权限  cancel 是否取消上次请求
 const defaultOptions = {
-	login: true,
+	login: false,
 	auth: false,
 	cancel: false,
 	loading: true, //是否显示 请求加载中
@@ -24,7 +27,7 @@ const defaultOptions = {
 };
 // 初始化请求
 let instance = unirequest.create({
-	baseURL: VUE_APP_URL,
+	baseURL: VUE_APP_API_URL,
 	timeout: 10000,
 	debug: true
 });
@@ -59,7 +62,7 @@ function baseRequest(config, options) {
 		cancelRequest()
 	}
 	loadingStatus(loading, true)
-	if (login && !store.state.token) {
+	if (login && !checkTokenStatus()) {
 		autoAuth();
 		return Promise.reject({
 			msg: "未登录"
@@ -70,10 +73,11 @@ function baseRequest(config, options) {
 		if (res.statusCode) {
 			let data = res.data;
 			if (res.statusCode === 200) {
-				if (data.status == 200) {
+				if (data.status) {
+					console.log('data',data)
 					return Promise.resolve(data);
 				} else {
-					return Promise.reject(data.msg || '系统错误');
+					return Promise.reject(data.msg ||data|| '系统错误');
 				}
 				return Promise.resolve(res.data);
 			} else {
@@ -169,7 +173,8 @@ const request = ['get', 'post', 'put', 'delete', 'connect', 'head', 'options', '
 		url,
 		method,
 		data
-	}, { ...defaultOptions,
+	}, {
+		...defaultOptions,
 		...options
 	});
 

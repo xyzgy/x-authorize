@@ -1,8 +1,8 @@
 {
     "name" : "uniTemplate",
-    "appid" : "__UNI__92D9658",
+    "appid" : "__UNI__DE6A6C4",
     "description" : "",
-    "versionName" : "1.0.0",
+    "versionName" : "2.0.1",
     "versionCode" : "100",
     "transformPx" : false,
     "app-plus" : {
@@ -56,11 +56,18 @@
     },
     "h5" : {
         "router" : {
-            "mode" : "history"
+            "mode" : "hash"
         },
         "optimization" : {
             "treeShaking" : {
                 "enable" : true
+            }
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : ""
+                }
             }
         }
     },

@@ -1,3 +1,9 @@
+import {
+	PATH_INDEX_URL
+} from '@/config.js'
+import {
+	debounce
+} from '@/utils/common.js';
 // 对uni中的交互反馈相关api组件进行封装  showToast、showModal
 export function uniShowToast(title = '提示语', icon = "none", args = {}) {
 	const {
@@ -27,7 +33,8 @@ export function uniShowToast(title = '提示语', icon = "none", args = {}) {
 		toast["position"] = position
 	}
 	// #endif
-	uni.showToast({ ...toast,
+	uni.showToast({
+		...toast,
 		...callBack(toast, {
 			success,
 			fail,
@@ -85,7 +92,8 @@ export function uniShowModal(title, content, args = {}) {
 		modal['confirmColor'] = confirmColor
 	}
 	// #endif
-	uni.showModal({ ...modal,
+	uni.showModal({
+		...modal,
 		...callBack(modal, {
 			success,
 			fail,
@@ -94,7 +102,7 @@ export function uniShowModal(title, content, args = {}) {
 	})
 }
 
-export function uniNavigator(url, type = 'navigateTo', args = {}) {
+export const uniNavigator = debounce(function(url, type = 'navigateTo', args = {}) {
 	type = Number(url) ? 'navigateBack' : (type || 'navigateTo');
 	const {
 		endtime = Number(url) ? 600 : 200,
@@ -153,15 +161,14 @@ export function uniNavigator(url, type = 'navigateTo', args = {}) {
 					})
 				} else {
 					uni.switchTab({
-						url: '/pages/index/index'
+						url: PATH_INDEX_URL
 					})
 				}
 			}, endtime);
 			break;
 
 	}
-}
-
+}, 500, true)
 
 export function uniStartPullDownRefresh(args = {}) {
 	uni.startPullDownRefresh(args);
