@@ -99,7 +99,7 @@
 					_this.close();
 					this.$emit('login', this.userInfo);
 				} else {
-					// #ifdef H5
+					// #ifdef H5 || APP-PLUS
 					_this.isAuto && autoAuth();
 					// #endif
 					// #ifdef MP

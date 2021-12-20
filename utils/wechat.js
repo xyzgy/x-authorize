@@ -14,22 +14,27 @@ import {
 
 // 校验微信环境
 export function isWeixin() {
+	// #ifdef H5
 	const userAgent = navigator.userAgent;
 	return userAgent.toLowerCase().indexOf("micromessenger") !== -1;
+	// #endif
+	// #ifndef H5
+	return false
+	// #endif
 }
 
 const getOAuth = async () => {
 	return new Promise((resolve, reject) => {
 		getWechatConfig({
-			url:location.href,
-			debug:true
+			url: location.href,
+			debug: true
 		}).then(res => {
-			if(res.data.appId || res.appId){
+			if (res.data.appId || res.appId) {
 				resolve(res.data || res)
-			}else{
-				 throw('参数格式错误，前往getOAuth方法修改返回参数')
+			} else {
+				throw ('参数格式错误，前往getOAuth方法修改返回参数')
 			}
-		}).catch(err=>{
+		}).catch(err => {
 			reject(err)
 		})
 	})
@@ -92,14 +97,14 @@ export const wechatPay = () => {
 }
 
 // 微信授权
-export const wechatAuth = (url='http://192.168.3.10:8080/login') => {
+export const wechatAuth = (url = 'http://192.168.3.10:8080/login') => {
 	if (!url && !REDIRECT_URI) {
-		 uni.showToast({
+		uni.showToast({
 			title: 'redirect_uri未传递或配置',
 			icon: 'error'
 		})
-		 throw new Error('config配置REDIRECT_URI或传递地址');
-		 return
+		throw new Error('config配置REDIRECT_URI或传递地址');
+		return
 	}
 	getOAuth().then(res => {
 		const {

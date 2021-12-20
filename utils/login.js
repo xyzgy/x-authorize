@@ -8,16 +8,17 @@ import {
 	getUserInfo
 } from '@/api/auth.js';
 import storage from '@/utils/storage.js'
+import {
+	WECHAT_LOGIN,
+	PATH_LOGIN_URL
+} from '@/config.js'
 // #ifdef H5
 import {
 	wechatAuth,
 	isWeixin
 } from './wechat.js';
 let _isWeixin = isWeixin();
-import {
-	WECHAT_LOGIN,
-	PATH_LOGIN_URL
-} from '@/config.js'
+
 // #endif
 
 // 自动去执行授权相关 获取对应信息
@@ -38,17 +39,20 @@ export function autoAuth() {
 			return false;
 		}
 		wechatAuth(location.href);
-		console.log('当前为公众号环境', location.href)
+		console.info('当前为公众号环境', location.href)
 	} else {
-
-		console.log(PATH_LOGIN_URL)
+		console.info('H5登录获取信息成功，返回上一级')
 		uniNavigator(PATH_LOGIN_URL)
 	}
+	// #endif
+	// #ifdef APP-PLUS
+	console.info('当前为APP环境')
+	uniNavigator(PATH_LOGIN_URL)
 	// #endif
 	// #ifdef  MP
 	// 微信授权信息
 	store.commit("SHOW_AUTH_POPUP_SHOW");
-	console.log('当前为小程序环境')
+	console.info('当前为小程序环境')
 	// #endif
 }
 
@@ -83,6 +87,10 @@ export function toLogin(data, callback) {
 			console.log('H5登录获取信息成功，返回上一级')
 			history.back()
 		}
+		// #endif
+		// #ifdef APP-PLUS
+		console.info('当前为APP环境')
+		uniNavigator(1)
 		// #endif
 		// #ifdef  MP
 		// 小程序授权信息

@@ -1,5 +1,5 @@
 <template>
-	<!--  #ifdef H5 -->
+	<!--  #ifdef H5 || APP-PLUS-->
 	<view v-if="isWeixinMode">
 		<view>仅H5在公众号授权之后过渡显示</view>
 	</view>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-	// #ifdef H5
+	// #ifdef H5 || APP-PLUS
 	import {
 		toLogin,
 		checkTokenStatus
@@ -123,7 +123,10 @@
 		},
 		onShow() {
 
-		}
+		},
+		onUnload(){
+			this.$storage.set('IS_AUTO_AUTH', false);
+		},
 	};
 	// #endif
 </script>

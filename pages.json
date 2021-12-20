@@ -19,15 +19,12 @@
 
 			}
 		},
-		// #ifdef H5
 		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "登录"
 			}
 		},
-		// #endif 
-
 		 {
 			"path": "pages/share/share",
 			"style": {

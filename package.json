@@ -1,7 +1,7 @@
 {
-  "name": "uniTemplate",
-  "version": "2.0.1",
-  "description": "h5、公众号、小程序授权登录 ",
+  "name": "xArthorize",
+  "version": "2.0.2",
+  "description": "h5、APP、公众号、小程序授权登录 ",
   "main": "",
   "dependencies": {
     "@dcloudio/uni-ui": "^1.4.9",
