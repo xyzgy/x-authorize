@@ -1,5 +1,5 @@
 {
-  "name": "xArthorize",
+  "name": "xAuthorize",
   "version": "2.0.2",
   "description": "h5、APP、公众号、小程序授权登录 ",
   "main": "",
@@ -7,7 +7,7 @@
     "@dcloudio/uni-ui": "^1.4.9",
     "uview-ui": "^1.8.4",
     "wechat-jssdk": "^5.0.4",
-    "x-wxml-to-canvas": "^1.0.3"
+    "x-wxml-to-canvas": "^1.0.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
