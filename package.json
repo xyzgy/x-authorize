@@ -1,10 +1,11 @@
 {
   "name": "xAuthorize",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "h5、APP、公众号、小程序授权登录 ",
   "main": "",
   "dependencies": {
     "@dcloudio/uni-ui": "^1.4.9",
+    "luch-request": "^3.0.7",
     "uview-ui": "^1.8.4",
     "wechat-jssdk": "^5.0.4",
     "x-wxml-to-canvas": "^1.0.4"
@@ -13,7 +14,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "uni授权"
+    "uni授权","request","wxml-to-canvas","wechat-jssdk"
   ],
   "author": "xyzgy",
   "license": "ISC"

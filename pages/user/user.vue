@@ -2,7 +2,7 @@
 	<view>
 		<view>{{ isLogin ? '已登录':'未登录' }}</view>
 		<view v-if="isLogin">
-			token有效期为60s,便于调试
+			token有效期为10s,便于调试
 			<!-- <image src="@/static/image/1.jpg" mode="aspectFit" @click="previewImage"></image> -->
 		</view>
 		<button class="unbtn" @click="init('auth')" v-else>手动</button>

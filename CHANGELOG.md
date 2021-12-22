@@ -1,3 +1,7 @@
+### 2.0.3
+* 引入[luch-request](https://www.quanzhan.co/luch-request/guide/3.x/#%E5%8F%AF%E9%85%8D%E7%BD%AE%E9%A1%B9) 并进行二次封装
+* 详见README.md
+
 ### 2.0.2
 * 适配APP端 (仅测试安卓)
 

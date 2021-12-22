@@ -37,7 +37,8 @@
 			}
 		},
 		methods: {},
-		mounted() {},
+		mounted() {
+		},
 		onPullDownRefresh() {
 			console.log('刷新');
 			this.$stopPullRefresh(1000);

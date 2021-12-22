@@ -18,7 +18,13 @@ components: {
 
 ### 使用需注意
 * [体验地址](https://uni.xyzgy.xyz)
-* 公众号授权逻辑最近有更新，由页面跳转改为弹窗，因此开发者工具与真机是两种情况，若授权之后回调逻辑不理想，自己视情况调整 （login.js 75-78，）,
+* 官方公众号授权逻辑最近有更新，由页面跳转改为弹窗，因此开发者工具与真机是两种情况，若授权之后回调逻辑不理想，自己视情况调整 （login.js 75-78，）
+
+### luch-request封装
+* utils/request.js
+* pending存储所有请求信息，请求成功之后会删除（剩余信息就是请求未完成或者失败的）
+* pending字段是Map对象，以页面路径+请求头+请求地址+请求参数作为key，基本可以保证唯一性
+* 取消task操作需求的可将pending字段全局存储，根据自己业务需求处理
 
 ### 项目简述
 * 2.0.1版本是重写后的版本，代码可读性更高，也更加便于调试，本人也承认之前版本的代码可读性太差，近段时间抽时间重新调整；
@@ -35,8 +41,9 @@ components: {
 * api/auth.js  公众号配置信息的获取，登录及用户信息获取 getWechatConfig(微信公众号配置)  / getUserInfo(用户信息) / login(多端登录授权)
 * components/x-authorize  小程序中会弹窗形式，h5跳转登录页，公众号调起公众号授权
 * store/index.js  保存登录相关信息
-* utils/login.js  授权及鉴权相关逻辑
+* utils/login.js  授权及鉴权相关逻辑  checkTokenStatus(登录信息是否过期) 
 * utils/wechat.js 公众号授权，包含用户信息授权及分享等功能的方法的封装 （可单独使用）
+* utils/request.js luch-request二次封装
 * config.js 全局变量的配置信息
 
 ### 字段说明
@@ -53,5 +60,5 @@ components: {
 ### 其它插件（主要维护的）
 * 不在列表中的的插件，已经放弃维护，属于uniapp刚推出时随手写的，没有太大维护意义
 * [uni版本的 html-to-canvas](https://ext.dcloud.net.cn/plugin?id=3998) 基于微信官方的wxml-to-canvas封装
-* [h5、公众号、小程序授权登录](https://ext.dcloud.net.cn/plugin?id=2647) 将h5登录，公众号授权登录、小程序授权登录统一封装
+* [h5、公众号、小程序授权登录](https://ext.dcloud.net.cn/plugin?id=2647) 将h5登录，公众号授权登录、小程序授权登录、APP登录统一封装
 
